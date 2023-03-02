@@ -1,13 +1,16 @@
 import UIKit
 
 /** HOW TO INSTALL XCODE AND CREATE A PLAYGROUND**/
-
 /** VARIABLES AND CONSTANTS **/
+
 var name = "Tim McGraw"
 name = "Romeo"
 
 var age: Int
 age = 25
+
+
+
 
 /** TYPES OF DATA **/
 
@@ -36,7 +39,11 @@ missABeat = false
 // USING TYPE ANNOTATIONS WISELY
 var otherName: String = "Tim McGraw"
 
+
+
+
 /** OPERATORS **/
+
 var a = 10
 a = a + 1
 a = a - 1
@@ -71,7 +78,11 @@ stayOutTooLate = true
 stayOutTooLate
 !stayOutTooLate
 
+
+
+
 /** STRING INTERPOLATION **/
+
 name = "Tim McGraw"
 "Your name is \(name)"
 
@@ -113,7 +124,11 @@ var bothNew = someOtherSongs + songs2
 
 bothNew += ["Everything has Changed"]
 
+
+
+
 /** DICTIONARIES **/
+
 var personArray = ["Taylor", "Alison", "Swift", "December", "taylorswift.com"]
 
 var personDict = ["first" : "Taylor", "middle" : "Alison", "last" : "Swift", "month" : "December",
@@ -131,7 +146,11 @@ person["first"]
 person["last"]
 person["website"]
 
+
+
+
 /** CONDITIONAL STATEMENTS **/
+
 var action: String
 var personality = "hater"
 
@@ -160,7 +179,11 @@ if !stayOutTooLate && !nothingInBrain {
     action = "cruise"
 }
 
+
+
+
 /** LOOPS **/
+
 print("1 x 10 is \(1 * 10)")
 print("2 x 10 is \(2 * 10)")
 print("3 x 10 is \(3 * 10)")
@@ -244,7 +267,11 @@ for song in songs {
 
 print("..........\n")
 
+
+
+
 /** SWITCH CASE **/
+
 let liveAlbums = 2
 
 switch liveAlbums {
@@ -279,7 +306,11 @@ default:
 
 print("..........\n")
 
+
+
+
 /** FUNCTIONS **/
+
 func favoriteAlbumFirst() {
     print("My favorite is Fearless")
 }
@@ -358,7 +389,11 @@ func getMeaningOfLifeShorter() -> Int {
 
 print("..........\n")
 
+
+
+
 /** OPTIONALS **/
+
 func getHaterStatus() -> String {
     return "Hate"
 }
@@ -413,23 +448,314 @@ if year == nil {
     print("It was released in \(year!)")
 }
 
-
+// IMPLICITLY UNRWRAPPED OPTIONALS
+// An implicitly unwrapped optional might contain a value, or might not, but it does not need to
+// be unwrapped before it is used. Swift won't check for you, so you need to be extra careful.
+// Example: String! might contain a string, or it might contain nil – and it's down to you to use
+// it appropriately.
+// The main times you're going to meet implicitly unwrapped optionals is when you're working with
+// user interface elements in UIKit on iOS or AppKit on macOS.
 
 print("..........\n")
+
+
+
 
 /** OPTIONAL CHAINING **/
+
+func albumReleased(year: Int) -> String? {
+    switch year {
+    case 2006: return "Taylor Swift"
+    case 2008: return "Fearless"
+    case 2010: return "Speak Now"
+    case 2012: return "Red"
+    case 2014: return "1989"
+    default: return nil
+    }
+}
+
+var album = albumReleased(year: 2006)
+print("The album is \(album)")
+
+let strHello = "Hello world"
+print(strHello.uppercased())
+
+album = albumReleased(year: 2006)?.uppercased()
+print("The album is \(album)")
+
+// let album = albumReleased(year: 2006)?.someOptionalValue?.someOtherOptionalValue?.whatever
+// Swift will check them from left to right until it finds nil, at which point it stops.
+
+// THE NIL COALESCING OPERATOR
+album = albumReleased(year: 2006) ?? "unknown"
+print("The album is \(album)")
+
 print("..........\n")
+
+
+
 
 /** ENUMERATIONS **/
+
+/*
+func getHaterStatus(weather: String) -> String? {
+    if weather == "sunny" {
+        return nil
+    } else {
+        return "Hate"
+    }
+}
+*/
+
+enum WeatherType {
+    case sun, cloud, rain, wind, snow
+}
+
+func getHaterStatus(weather: WeatherType) -> String? {
+    if weather == WeatherType.sun {
+        return nil
+    } else {
+        return "hate"
+    }
+}
+
+getHaterStatus(weather: WeatherType.cloud)
+
+enum WeatherTypeNew {
+    case sun
+    case cloud
+    case rain
+    case wind
+    case snow
+}
+
+func getHaterStatus(weather: WeatherTypeNew) -> String? {
+    if weather == .sun {
+        return nil
+    } else {
+        return "Hate"
+    }
+}
+
+getHaterStatus(weather: WeatherTypeNew.cloud)
+
+func getHateStatusSwitch(weather: WeatherType) -> String? {
+    switch weather {
+    case .sun:
+        return nil
+    case .cloud, .wind:
+        return "dislike"
+    case .rain:
+        return "hate"
+    default:    // snow is missing
+        return "let's say it's okay"
+    }
+}
+
+// ENUMS WITH ADDITIONAL VALUES
+enum WeatherTypeWithAdditionalValues {
+    case sun
+    case cloud
+    case rain
+    case wind(speed: Int)
+    case snow
+}
+
+// Now for the real magic: Swift lets us add extra conditions to the switch/case block so that
+// a case will match only if those conditions are true
+
+func getHatersStatusExpanded(weather: WeatherTypeWithAdditionalValues) -> String? {
+    switch weather {
+    case .sun:
+        return nil
+    case .wind(let speed) where speed < 10:
+        return "meh"
+    case .cloud, .wind:
+        return "dislike"
+    case .rain, .snow:
+        return "hate"
+    }
+}
+
+getHatersStatusExpanded(weather: WeatherTypeWithAdditionalValues.wind(speed: 7))
+
 print("..........\n")
+
+
+
 
 /** STRUCTS **/
+
+struct Person {
+    var clothes: String
+    var shoes: String
+}
+
+let taylor = Person(clothes: "T-shirts", shoes: "sneakers")
+let other = Person(clothes: "short skirts", shoes: "high heels")
+
+print(taylor.clothes)
+print(other.shoes)
+
+var taylorCopy = taylor
+taylorCopy.shoes = "flip flops"
+
+// FUNCTIONS INSIDE STRUCTS
+struct PersonWithDescription {
+    var clothes: String
+    var shoes: String
+
+    func describe() {
+        print("I like wearing \(clothes) with \(shoes)")
+    }
+}
+
 print("..........\n")
+
+
+
 
 /** CLASSES **/
+
+// INITIALIZATION AN OBJECT
+class PersonAnother {
+    var clothes: String
+    var shoes: String
+    
+    init(clothes: String, shoes: String) {
+        self.clothes = clothes
+        self.shoes = shoes
+    }
+}
+
+// CLASS INHERITANCE
+
+class Singer {
+    var name: String
+    var age: Int
+
+    init(name: String, age: Int) {
+        self.name = name
+        self.age = age
+    }
+
+    func sing() {
+        print("La la la la")
+    }
+}
+
+var jake = Singer(name: "Jake", age: 25)
+jake.name
+jake.age
+jake.sing()
+
+class CountrySinger: Singer {
+    override func sing() {
+        print("Trucks, guitar, and liquor")
+    }
+}
+
+var mark = CountrySinger(name: "Mark", age: 34)
+mark.sing()
+
+class HeavyMetalSinger: Singer {
+    var noiseLevel: Int
+    
+    init(noiseLevel: Int, name: String, age: Int) {
+        self.noiseLevel = noiseLevel
+        // calling superclass init (Singer)
+        super.init(name: name, age: age)
+    }
+    
+    override func sing() {
+        print("Grrrr rargh rargh rarrrrgh!")
+    }
+}
+
+// WORKING WITH OBJECTIVE-C CODE
+// If you want to have some part of Apple’s operating system call your Swift class’s method,
+// you need to mark it with a special attribute: @objc.
+
+// VALUES VS REFERENCES
+// This is an important difference, and it means the choice between structs and classes is
+// an important one:
+
+// - If you want to have one shared state that gets passed around and modified in place,
+// you're looking for classes. You can pass them into functions or store them in arrays,
+// modify them in there, and have that change reflected in the rest of your program.
+
+// - If you want to avoid shared state where one copy can't affect all the others, you're
+// looking for structs. You can pass them into functions or store them in arrays, modify them
+// in there, and they won't change wherever else they are referenced.
+
+// Classes offer more flexibility, whereas structs offer more safety.
+
 print("..........\n")
 
+
+
+
 /** PROPERTIES **/
+
+struct SomePerson {
+    var clothes: String
+    var shoes: String
+
+    func describe() {
+        print("I like wearing \(clothes) with \(shoes)")
+    }
+}
+
+let bart = SomePerson(clothes: "T-shirts", shoes: "sneakers")
+let otherPerson = SomePerson(clothes: "short skirts", shoes: "high heels")
+bart.describe()
+otherPerson.describe()
+
+// PROPERTY OBSERVERS
+struct SomeOtherPerson {
+    var clothes: String {
+        willSet {
+            updateUI(msg: "I'm chaning from \(clothes) to \(newValue)")
+        }
+        
+        didSet {
+            updateUI(msg: "I just changed from \(oldValue) to \(clothes)")
+        }
+    }
+    
+    func updateUI(msg: String) {
+        print(msg)
+    }
+}
+
+var jason = SomeOtherPerson(clothes: "jeans")
+jason.clothes = "suit"
+
+// COMPUTED PROPERTIES
+
+struct YetAnotherPerson {
+    var age: Int
+    
+    var ageInDogYears: Int {
+        get {
+            return age * 7
+        }
+    }
+    
+    /*
+     * Note: If you intend to use them only for reading data you can just remove the get part
+     * entirely, like this:
+     var ageInDogYears: Int {
+             return age * 7
+     }
+     */
+    
+}
+
+var fan = YetAnotherPerson(age: 16)
+print(fan.ageInDogYears)
+
+
 print("..........\n")
 
 /** STATIC PROPERTIES AND METHODS **/
