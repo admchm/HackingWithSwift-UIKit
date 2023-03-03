@@ -579,9 +579,6 @@ func getHatersStatusExpanded(weather: WeatherTypeWithAdditionalValues) -> String
 
 getHatersStatusExpanded(weather: WeatherTypeWithAdditionalValues.wind(speed: 7))
 
-print("..........\n")
-
-
 
 
 /** STRUCTS **/
@@ -755,28 +752,339 @@ struct YetAnotherPerson {
 var fan = YetAnotherPerson(age: 16)
 print(fan.ageInDogYears)
 
-
 print("..........\n")
+
+
+
 
 /** STATIC PROPERTIES AND METHODS **/
+
+struct TaylorFan {
+    static var favoriteSong = "Look What You Made Me Do"
+
+    var name: String
+    var age: Int
+}
+
+let newFan = TaylorFan(name: "James", age: 25)
+print(TaylorFan.favoriteSong)
+
 print("..........\n")
+
+
+
 
 /** ACCESS CONTROL **/
-print("..........\n")
+
+// Access control modifiers:
+
+// - Public: this means everyone can read and write the property.
+// - Internal: this means only your Swift code can read and write the property. If you ship
+//      your code as a framework for others to use, they won’t be able to read the property.
+// - File Private: this means that only Swift code in the same file as the type can read and
+//      write the property.
+// - Private: this is the most restrictive option, and means the property is available only
+//      inside methods that belong to the type, or its extensions.
+
+class TaylorFanNew {
+    private var name: String?
+}
+
+
+
 
 /** POLYMORPHISM AND TYPECASTING **/
+
+class Album {
+    var name: String
+
+    init(name: String) {
+        self.name = name
+    }
+}
+
+class StudioAlbum: Album {
+    var studio: String
+
+    init(name: String, studio: String) {
+        self.studio = studio
+        super.init(name: name)
+    }
+}
+
+class LiveAlbum: Album {
+    var location: String
+
+    init(name: String, location: String) {
+        self.location = location
+        super.init(name: name)
+    }
+}
+
+// That defines three classes: albums, studio albums and live albums, with the latter two
+// both inheriting from Album. Because any instance of LiveAlbum is inherited from Album it
+// can be treated just as either Album or LiveAlbum – it's both at the same time. This is
+// called "polymorphism".
+
+var taylorSwift = StudioAlbum(name: "Taylor Swift", studio: "The Castles Studios")
+var fearless = StudioAlbum(name: "Speak Now", studio: "Aimeeland Studio")
+var iTunesLive = LiveAlbum(name: "iTunes Live from SoHo", location: "New York")
+
+var allAlbums: [Album] = [taylorSwift, fearless, iTunesLive]
+
+class AlbumPerformance {
+    var name: String
+
+    init(name: String) {
+        self.name = name
+    }
+
+    func getPerformance() -> String {
+        return "The album \(name) sold lots"
+    }
+}
+
+class StudioAlbumPerformance: AlbumPerformance {
+    var studio: String
+
+    init(name: String, studio: String) {
+        self.studio = studio
+        super.init(name: name)
+    }
+
+    override func getPerformance() -> String {
+        return "The studio album \(name) sold lots"
+    }
+}
+
+class LiveAlbumPerformance: AlbumPerformance {
+    var location: String
+
+    init(name: String, location: String) {
+        self.location = location
+        super.init(name: name)
+    }
+
+    override func getPerformance() -> String {
+        return "The live album \(name) sold lots"
+    }
+}
+
+var taylorSwiftPerformance = StudioAlbumPerformance(name: "Taylor Swift", studio: "The Castles Studios")
+var fearlessPerformance = StudioAlbumPerformance(name: "Speak Now", studio: "Aimeeland Studio")
+var iTunesLivePerformance = LiveAlbumPerformance(name: "iTunes Live from SoHo", location: "New York")
+
+var allAlbumsPerformance: [AlbumPerformance] = [taylorSwiftPerformance, fearlessPerformance, iTunesLivePerformance]
+
+for album in allAlbumsPerformance {
+    print(album.getPerformance())
+}
+
+// CONVERTING TYPES WITH TYPECASTING
+for album in allAlbumsPerformance {
+    let studioAlbum = album as? StudioAlbum
+}
+
+for album in allAlbumsPerformance {
+    print(album.getPerformance())
+
+    if let studioAlbum = album as? StudioAlbumPerformance {
+        print(studioAlbum.studio)
+    } else if let liveAlbum = album as? LiveAlbumPerformance {
+        print(liveAlbum.location)
+    }
+}
+
+var taylorSwiftPerformanceNew = StudioAlbumPerformance(name: "Taylor Swift", studio: "The Castles Studios")
+var fearlessPerformanceNew = StudioAlbumPerformance(name: "Speak Now", studio: "Aimeeland Studio")
+
+var allAlbumsPerformanceNew: [AlbumPerformance] = [taylorSwiftPerformanceNew, fearlessPerformanceNew]
+
+for album in allAlbumsPerformanceNew {
+    let studioAlbum = album as! StudioAlbumPerformance
+    print(studioAlbum.studio)
+}
+
+for album in allAlbums as? [LiveAlbum] ?? [LiveAlbum]() {
+    print(album.location)
+}
+
+// CONVERTING COMMON TYPES WITH INITIALIZERS
+
+// fails:
+// let number = 5
+// let text = number as! String
+
+// better way
+let numberNew = 5
+let textNew = String(numberNew)
+
 print("..........\n")
+
+
+
 
 /** CLOSURES **/
-print("..........\n")
+
+// A closure can be thought of as a variable that holds code. Closures also capture the
+// environment where they are created, which means they take a copy of the values that
+// are used inside them.
+
+/*
+// Example from SwiftUI:
+ 
+let message = "Button pressed!"
+
+Button("Press me!", action: {
+    print(message)
+})
+*/
+
+// The above code also shows how closures capture their environment: I intentionally
+// declared the message constant outside of the closure, then used it inside. Swift
+// detects this, and makes that data available inside the closure too.
+
+// TRAILING CLOSURES
+
+// The rule is this: if the last parameters to a method are closures, you can eliminate
+// those parameters and instead provide them as a block of code inside braces.
+
+/*
+let message = "Button pressed!"
+
+Button("Press me!", action: {
+    print(message)
+})
+*/
+
+// vs (trailing closure)
+
+/*
+let message = "Button pressed!"
+
+Button ("Press me!") {
+    print("message")
+}
+*/
+
+
+
 
 /** PROTOCOLS **/
-print("..........\n")
+
+// Protocols are effectively contracts in Swift
+protocol Employee {
+    var name: String { get set }
+    var jobTitle: String { get set }
+    func doWork()
+}
+
+struct Executive: Employee {
+    var name = "Steve Jobs"
+    
+    var jobTitle = "CEO"
+    
+    func doWork() {
+        print("I'm strategizing!")
+    }
+    
+    
+}
+
+struct Manager: Employee {
+    var name = "Maurice Moss"
+    
+    var jobTitle = "Head of IT"
+    
+    func doWork() {
+        print("I'm turning it off and on again.")
+    }
+}
+
+// Notice how we use [any Employee] rather than just [Employee] – this is Swift’s way
+// of making it clear in our code that the actual data types inside the array could be
+// anything at all, as long as it conforms to the Employee protocol.
+
+let staff: [any Employee] = [Executive(), Manager()]
+for person in staff {
+    print(person.doWork())
+}
+
+
+
 
 /** EXTENSIONS **/
+
+var myInt = 0
+
+// Tip: As that method contains only a single line of code that must return a value,
+// you can remove the return keyword entirely.
+
+// mutating will change its input
+extension Int {
+    mutating func plusOne() -> Int {
+        return self + 1
+    }
+}
+
+myInt.plusOne()
+
+// A common naming scheme for naming your extension files is Type+Modifier.swift, for
+// example String+RandomLetter.swift.
+
+str = str.trimmingCharacters(in: .whitespacesAndNewlines)
+
+extension String {
+    func trim() {
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+str.trim()
+
 print("..........\n")
+
+
+
 
 /** PROTOCOL EXTENSIONS **/
-print("..........\n")
-/** WRAP UP **/
 
+extension Int {
+    func clamp(low: Int, high: Int) -> Int {
+        if self > high {
+            // if we are higher than the upper bound, return the upper bound
+            return high
+        } else if self < low {
+            // if we are lower than the lower bound, return the lower bound
+            return low
+        }
+
+        // we are inside the range, so return our value
+        return self
+    }
+}
+
+let i: Int = 8
+print(i.clamp(low: 0, high: 5))
+
+// let j: UInt64 = 8
+// print(j.clamp(low: 0, high: 5))      - Value of type 'UInt64' has no member 'clamp'
+
+// Self with a capital S, which has a subtly different meaning: it means “my current data type.”
+
+// return Self, which means “I’ll return whatever data type I was used with.”
+extension BinaryInteger {
+    func clamp(low: Self, high: Self) -> Self {
+        if self > high {
+            return high
+        } else if self < low {
+            return low
+        }
+
+        return self
+    }
+}
+
+print("..........\n")
+
+/** WRAP UP **/
